@@ -3,6 +3,7 @@ import numpy as np
 import csv
 import pandas
 from enum import IntEnum
+import math
 
 class Action(IntEnum):
     ADVANCE    = 1
@@ -19,8 +20,20 @@ class Maze:
         self.explored = set()
 
         for dt in self.raw_data:
-            continue
+            node_tmp = Node(dt[0])
+            for successors_index in range(1,5):
+                if not math.isnan(dt[successors_index]):
+                    if not math.isnan(dt[successors_index+4]):
+                        node_tmp.setSuccessor(dt[successors_index], successors_index, dt[successors_index+4])
+                    else:
+                        node_tmp.setSuccessor(dt[successors_index], successors_index)
+            # continue
+            nodes.append(node_tmp)
             #TODO: Update the nodes with the information from raw_data
+        for node in nodes:
+            print("Index: ", node.index, "\n", node.successors)
+            
+
 
 
         for i in range(len(self.nodes)):

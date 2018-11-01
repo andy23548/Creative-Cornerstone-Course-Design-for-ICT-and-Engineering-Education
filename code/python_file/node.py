@@ -28,15 +28,18 @@ class Node:
 
     def setSuccessor(self, successor, direction, length=1):
         for succ in self.Successors:
+
         	continue #TODO: check whether the input of the function is valid by comparing with the class member
         #TODO: Update the successors in data members 
+        self.successors.append(successor, direction, length)
+        print("Index : ", index)
         return
 
     def getSuccessor(self, direction):
         for succ in self.Successors:
         	continue #TODO: Check which successor matches the input corner and return
         # For the valid input, the below part shouldn't be entered
-        print("Node(", self.index, ") Successor is not found")
+        # print("Node(", self.index, ") Successor is not found")
         return 0
 
     def getDirection(self, nd):

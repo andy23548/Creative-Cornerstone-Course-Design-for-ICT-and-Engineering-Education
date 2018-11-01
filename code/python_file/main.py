@@ -16,21 +16,20 @@ def main():
     point = score.Scoreboard("data/UID.csv")
     interface = student.interface()         # the part of calling student.py was commented out.
 
-
-    if(sys.argv[1] == '0'):
-
+    # Do not have destination
+    if (sys.argv[1] == '0'):
+        print("Mode 0")
         while (1):
 
             #TODO: Impliment your algorithm here and return the UID for evaluation function
             ndList = maze.strategy(next_nd)
-            
-
             # ================================================
             # Basically, you will get a list of nodes and corresponding UID strings after the end of algorithm.
 			# The function add_UID() would convert the UID string score and add it to the total score.
 			# In the sample code, we call this function after getting the returned list. 
             # You may place it to other places, just make sure that all the UID strings you get would be converted.
             # ================================================
+            
 
             for i in range(1, len(ndList)):
                 node = 0
@@ -39,13 +38,13 @@ def main():
 
             break
 
-    elif(sys.argv[1] == '1'):
-
+    # Have destination
+    elif (sys.argv[1] == '1'):
+        print("Mode 1")
         while (1):
 
             #TODO: Implement your algorithm here and return the UID for evaluation function
             nd = int(input("destination: "))
-            
             if(nd == 0):
             	print("end process")
             	print('')
@@ -56,6 +55,30 @@ def main():
                 get_UID = "just a test"
                 point.add_UID(get_UID)
 
+    # Our testing mode
+    elif (sys.argv[1] == '2'):
+        print("Mode 2")
+        while(1):
+            state_cmd = input("Please enter a mode command: ")
+            print(state_cmd)
+            # if state_cmd == 's':
+            #     print(state_cmd)
+            # if state_cmd == '':
+            #     print(state_cmd)
+            # if state_cmd == 's':
+            #     print(state_cmd)
+            # if state_cmd == 's':
+            #     print(state_cmd)
+            # if state_cmd == 's':
+            #     print(state_cmd)
+            # if state_cmd == 's':
+            #     print(state_cmd)
+
+            interface.ser.SerialWrite(state_cmd)
+            interface.ser.SerialReadString()
+            if state_cmd == "break":
+                
+                break
     """
     node = 0
     while(not node):
