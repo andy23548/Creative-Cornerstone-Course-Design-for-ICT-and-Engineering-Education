@@ -155,7 +155,8 @@ void SetState() {
          #ifdef DEBUG
          Serial.println("Backing to Remote Mode..."); 
          #endif
-       } else if(_cmd == 't') {
+         MotorWriting(0,0);
+      } else if(_cmd == 't') {
          //TODO
          // change _state and reinitialize _cmd
          _state = SETTING_STATE;
@@ -194,16 +195,17 @@ void Tracing_Mode() {
 
    //TODO
    // Initialize Senor value
-   int r2 = analogRead(R2);
-   int r1 = analogRead(R1);  // right-inner sensor
-   int m = analogRead(M); // middle sensor
-   int l1 = analogRead(L1); // left-inner sensor
-   int l2 = analogRead(L2);
-   Serial.print(r2);
-   Serial.print(r1);
-   Serial.print(m);
-   Serial.print(l1);
-   Serial.print(l2);
+   int r2 = digitalRead(R2);
+   int r1 = digitalRead(R1);  // right-inner sensor
+   int m = digitalRead(M); // middle sensor
+   int l1 = digitalRead(L1); // left-inner sensor
+   int l2 = digitalRead(L2);
+   Serial.println(r2);
+   Serial.println(r1);
+   Serial.println(m);
+   Serial.println(l1);
+   Serial.println(l2);
+   Serial.println();
    //Testing Motor
    // 宣告 MotorL 為左邊
 //  analogWrite(MotorR_PWMR, 255);
@@ -217,7 +219,25 @@ void Tracing_Mode() {
    //TODO
    // Using "MotorWriting()" to turn or go straight
    // depending on the sensors value
-
+   
+	if (r2 == HIGH) { // test sensor value!!! HIGH/Low = when road is sensed 
+		MotorWriting(200, 50);
+	} else if ((r2 == HIGH) && (r1 == HIGH)) {
+		MotorWriting(200, 100);
+	} else if ((r1 == HIGH) && (m == HIGH)) {
+		MotorWriting(200, 150);
+	} else if (m == HIGH) {
+		MotorWriting(200,200);
+	} else if ((m == HIGH) && (l1 == HIGH)) {
+		MotorWriting(150, 200);
+	} else if ((l1 == HIGH) && (l2 == HIGH)) {
+		MotorWriting(100, 200);
+	} else if (l2 == HIGH) {
+		MotorWriting(50, 200);
+	} else {			// 2 scenarios: when car goes off-course, and when car almost corrects course (road IN-BETWEEN sensors)
+		MotorWriting(100,100); // not the best decision
+	}
+//	delay(500);
 }
 
 void MotorWriting(double vR, double vL) {
@@ -349,6 +369,8 @@ void get_cmd(char &cmd) {
      // just record the char what I2CBT read
      if (I2CBT.available()) {
        cmd = I2CBT.read();
+     } else {
+       cmd = 'n';
      }
      // what I write END
      // For debugging you can ignore this
