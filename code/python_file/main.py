@@ -42,7 +42,6 @@ def main():
     elif (sys.argv[1] == '1'):
         print("Mode 1")
         while (1):
-
             #TODO: Implement your algorithm here and return the UID for evaluation function
             nd = int(input("destination: "))
             if(nd == 0):

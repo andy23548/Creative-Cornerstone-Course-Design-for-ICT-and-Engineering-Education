@@ -28,23 +28,32 @@ class Node:
 
     def setSuccessor(self, successor, direction, length=1):
         for succ in self.Successors:
-
-        	continue #TODO: check whether the input of the function is valid by comparing with the class member
+            if (succ[0] == successor) and ((succ[1] != direction) or (succ[2] != length)):
+                print("There are duplicate successor in the data. Please check !!!!")
+                #TODO: check whether the input of the function is valid by comparing with the class member
+                raise Exception("Duplicate ERROR!")
         #TODO: Update the successors in data members 
-        self.successors.append(successor, direction, length)
-        print("Index : ", index)
+        self.Successors.append((successor, direction, int(length)))
+        print("Index : ", self.index)
         return
 
     def getSuccessor(self, direction):
         for succ in self.Successors:
-        	continue #TODO: Check which successor matches the input corner and return
+            if succ[1] == direction:
+                return succ
+        print("You do not have this successor in this direction!!!")
+        print("Node(", self.index, ") Successor is not found")
+        # Our own definition
+        return((0, 0, 0))
+        	#TODO: Check which successor matches the input corner and return
         # For the valid input, the below part shouldn't be entered
-        # print("Node(", self.index, ") Successor is not found")
-        return 0
+
 
     def getDirection(self, nd):
         for succ in self.Successors:
-        	continue #TODO: Check which successor matches the input direction and return
+            if succ[0] == nd.getIndex:
+                return succ[1]
+            #TODO: Check which successor matches the input direction and return
         # For the valid input, the below part shouldn't be entered
         print("Error in Node.py, getDirection()")
         print("Node(",nd.getIndex(),") is not the Successor of node(",self.index,")")

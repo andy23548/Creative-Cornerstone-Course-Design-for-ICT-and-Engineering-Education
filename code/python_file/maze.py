@@ -1,4 +1,4 @@
-import node
+from node import *
 import numpy as np
 import csv
 import pandas
@@ -20,26 +20,25 @@ class Maze:
         self.explored = set()
 
         for dt in self.raw_data:
-            node_tmp = Node(dt[0])
+            index = int(dt[0])
+            node_tmp = Node(index)
             for successors_index in range(1,5):
                 if not math.isnan(dt[successors_index]):
                     if not math.isnan(dt[successors_index+4]):
-                        node_tmp.setSuccessor(dt[successors_index], successors_index, dt[successors_index+4])
+                        node_tmp.setSuccessor(int(dt[successors_index]), successors_index, int(dt[successors_index+4]))
                     else:
-                        node_tmp.setSuccessor(dt[successors_index], successors_index)
-            # continue
-            nodes.append(node_tmp)
+                        node_tmp.setSuccessor(int(dt[successors_index]), successors_index)
+            self.nodes.append(node_tmp)
+            # Add nd_dictionary by {key(index) : value(node)}
+            self.nd_dict[index] = node_tmp
             #TODO: Update the nodes with the information from raw_data
-        for node in nodes:
-            print("Index: ", node.index, "\n", node.successors)
-            
-
-
-
-        for i in range(len(self.nodes)):
-            for j in range(1,5):
-                continue
-                #TODO: Update the successors for each node
+        for node in self.nodes:
+            print("Index: ", node.index, "\n", node.Successors)
+    
+        # for i in range(len(self.nodes)):
+        #     for j in range(1,5):
+        #         continue
+        #         #TODO: Update the successors for each node
 
     def getStartPoint(self):
 
@@ -76,8 +75,27 @@ class Maze:
         if nd_from.isSuccessor(nd_to):
             nd_dir = nd_from.getDirection(nd_to)
             #TODO: Return the action based on the current car direction and the direction to next node
+            if car_dir not in range(1,5):
+                raise Exception("car_dir invalid ERROR!")
+            if nd_dir == car_dir:
+                return Action.ADVANCE
+            if ((car_dir == 1) and (nd_dir == 4)) or\
+                ((car_dir == 4) and (nd_dir == 2)) or\
+                ((car_dir == 2) and (nd_dir == 3)) or\
+                ((car_dir == 3) and (nd_dir == 1)):
+                return Action.TURN_RIGHT
+            if ((car_dir == 1) and (nd_dir == 3)) or\
+                ((car_dir == 3) and (nd_dir == 2)) or\
+                ((car_dir == 2) and (nd_dir == 4)) or\
+                ((car_dir == 4) and (nd_dir == 1)):
+                return Action.TURN_LEFT
+            if ((car_dir == 1) and (nd_dir == 2)) or\
+                ((car_dir == 3) and (nd_dir == 4)) or\
+                ((car_dir == 2) and (nd_dir == 1)) or\
+                ((car_dir == 4) and (nd_dir == 3)):
+                return Action.U_TURN
             print("Error: Failed to get the action")
-            return 0
+            return Action.HALT
         else:
             print("Error: Node(",nd_to.getIndex(),") is not the Successor of Node(",nd_from.getIndex(),")")
             return 0

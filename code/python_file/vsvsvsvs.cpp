@@ -218,16 +218,16 @@ void Tracing_Mode() {
    
   if ((r2 == HIGH) && (r1 == LOW) && (m == LOW) && (l1 == LOW) && (l2 == LOW)) {  
     // big right turn
-    MotorWriting(-100, 250);
+    MotorWriting(0, 200);
   } else if ((r2 == HIGH) && (r1 == HIGH) && (m == LOW) && (l1 == LOW) && (l2 == LOW)) {
     // small right turn 
-    MotorWriting(-50, 250);
+    MotorWriting(50, 200);
   } else if ((r2 == HIGH) && (r1 == HIGH) && (m == HIGH) && (l1 == LOW) && (l2 == LOW)) {
     // small right turn 
-    MotorWriting(0, 200);
+    MotorWriting(100, 200);
   } else if ((r2 == LOW) && (r1 == HIGH) && (m == LOW) && (l1 == LOW) && (l2 == LOW)) {
     // small right turn 
-    MotorWriting(50, 200);
+    MotorWriting(100, 200);
   } else if ((r2 == LOW) && (r1 == HIGH) && (m == HIGH) && (l1 == LOW) && (l2 == LOW)) {
     // small right turn
     MotorWriting(100, 150);
@@ -242,19 +242,19 @@ void Tracing_Mode() {
     MotorWriting(150, 100);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == HIGH) && (l2 == LOW)) {
     // small left turn
-    MotorWriting(200, 50);
+    MotorWriting(200, 100);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == HIGH) && (l1 == HIGH) && (l2 == HIGH)) {
     // small left turn
-    MotorWriting(200, 0);
+    MotorWriting(200, 100);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == HIGH) && (l2 == HIGH)) {
     // small left turn
-    MotorWriting(250, -50);
+    MotorWriting(200, 50);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == LOW) && (l2 == HIGH)) {
     // big left turn
-    MotorWriting(250, -100);
+    MotorWriting(200, 0);
   } else {
     // don't know what to do; stop
-    MotorWriting(-50, -50);
+    MotorWriting(0, 0);
   }
    //delay(500);
 
