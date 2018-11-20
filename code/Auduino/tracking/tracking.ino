@@ -1,19 +1,24 @@
-#include<Wire.h>
-#include<SoftwareSerial.h>
+#include <Wire.h>
+#include <SoftwareSerial.h>
 #include <SPI.h>
 #include <MFRC522.h>
+#include "track.h"
+#include "node.h"
+#include "bluetooth.h"
+#include "RFID.h"
 
 // App Controller State
 enum ControlState {
    START_STATE,
    REMOTE_STATE,
    TRACKING_STATE,
-   SETTING_STATE
+   SETTING_STATE,
+   FINAL_STATE
 };
 
-#define RST_PIN      4        // RFID reset pin
+#define RST_PIN      8        // RFID reset pin
 #define SS_PIN       13        // RFID selection pin
-#define RFID_SDA      9
+#define RFID_SDA     10
 #define RFID_SCK     13
 #define RFID_MOSI    11
 #define RFID_MISO    12
@@ -63,6 +68,7 @@ bool L_dir = true;                  // if dir == ture, mean Left-motor is forwar
 /*   Function Prototypes Define Here  */
 /*   Finish TODO in Blacking Function */
 /**************************************/
+void Final_Mode();
 void Tracing_Mode();
 void Remote_Mode();
 void Start_Mode();
@@ -113,10 +119,7 @@ void setup()
     /*define your pin mode*/
 }
 
-#include "track.h"
-#include "node.h"
-#include "bluetooth.h"
-#include "RFID.h"
+
 
 void loop()
 {
@@ -125,6 +128,7 @@ void loop()
    else if(_state == REMOTE_STATE) Remote_Mode();
    else if(_state == TRACKING_STATE) Tracing_Mode();
    else if(_state == SETTING_STATE) Setting_Mode();
+   else if(_state == FINAL_STATE) Final_Mode();
    SetState();
 }
 
@@ -417,6 +421,34 @@ void Remote_Mode() {
      MotorWriting(0, 0);
    }
    // what I write END  
+}
+
+void Final_Mode() {
+   //TODO
+   /***********************************************/
+   /* 1. Receive action from py */
+   /* 2. Scan for RFID while tracking */
+   /* 3. Send RFID when succesfully scanned */
+   /* repeat from 1 */
+   /***********************************************/
+   /*   Start from first node
+        python:   GetAction(car_dir, nd_from, nd_to)
+                  SendAction to Arduino
+        Arduino:  Receive action from python
+                  Move to next node
+                  read RFID
+                  Send RFID to python
+        python:   Receive RFID
+                  Process and get next action
+                  send to Arduino
+        Arduino:  repeat from previous
+        Python:   Repeat from previous until final node is reached
+                  send 'e' (end cycle)
+        Arduino:  stop motors
+                  break connection              
+      */
+   
+   
 }
 
 void get_cmd(char &cmd) {
