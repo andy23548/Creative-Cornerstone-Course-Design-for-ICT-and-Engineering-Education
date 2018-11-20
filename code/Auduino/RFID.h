@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include <MFRC522.h>     // 引用程式庫
-/* pin---- SDA:9 SCK:13 MOSI:11 MISO:12 GND:GND RST:9  */
+/* pin---- SDA:9 SCK:13 MOSI:11 MISO:12 GND:GND RST:9   
+		!!!!!!! we used different pin settings !!!!!!!!!!
+*/
 
 byte* rfid(byte* idSize) {
     // 確認是否有新卡片
