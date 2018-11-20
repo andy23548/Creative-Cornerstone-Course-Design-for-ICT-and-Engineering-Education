@@ -41,11 +41,13 @@ class Maze:
         #         #TODO: Update the successors for each node
 
     def getStartPoint(self):
-
         if (len(self.nd_dict) < 2):
             print ("Error: the start point is not included.")
             return 0
         return self.nd_dict[1]
+
+    def getNodeDict(self):
+        return self.nd_dict
     
     def BFS(self, nd):
         """ return a sequence of nodes from the node to the nearest unexplored deadend"""
@@ -53,22 +55,77 @@ class Maze:
         queue = [nd]
         # explored set
         ndList = []
-        while (True):
-            #TODO: Apply your algorithm here. Make sure your algorithm can update values and stop under some conditions.
-
-            break
-        #TODO: update the information of your data structure
-
-        ndList.reverse()
-
-        return ndList
+        transitionTable = dict()
+        explored = set()
+        # main loop
+        while True:
+            if not queue:  # if Q is empty
+                print('End point is not found!')
+                break
+            # u : the last element of queue
+            u = queue.pop()
+            print("Debug")
+            print(u.getIndex())
+            print(self.nd_dict[u.getSuccessors()[0][0]] in explored)
+            if (len(u.getSuccessors()) is 1) and (self.nd_dict[u.getSuccessors()[0][0]] in explored) :  # check if u is the end node
+                nd_to = u
+                break  # return the transition table
+            explored.add(u)  # add u to explored set
+            for v in u.getSuccessors():  # loop over all adjacency of u
+                node = self.nd_dict[v[0]]
+                if (node not in queue) and (node not in explored):
+                    # Add to the first elemenet in queue
+                    queue.insert(0, node)  # add v to Q
+                    transitionTable[node] = u
+        # from transition table (transitionTable) to answer (ndList)
+        now_nd = nd_to
+        ndList.insert(0, now_nd)
+        while now_nd is not nd:
+            now_nd = transitionTable[now_nd]
+            ndList.insert(0, now_nd)  # insert to the front end, then no need to reverse
+        # what I write end ------
+        for i in ndList:
+            print(i.getIndex())
+        return ndList 
 
     def BFS_2(self, nd_from, nd_to):
         """ return a sequence of nodes of the shortest path"""
-        #TODO: similar to BFS but fixed start point and end point
+        # TODO: similar to BFS but fixed start point and end point
         ndList = []
-
-        return ndList
+        # what I write begin ------
+        # initialize
+        queue = [nd_from]  # Q: contains only start node initially
+        # print(nd_from)
+        transitionTable = dict()
+        explored = set()
+        # main loop
+        while True:
+            if not queue:  # if Q is empty
+                print('End point is not found!')
+                break
+            # u : the last element of queue
+            u = queue.pop()
+            print("Debug")
+            print(u.getIndex())
+            if u is nd_to:  # check if u is the end node
+                break  # return the transition table
+            explored.add(u)  # add u to explored set
+            for v in u.getSuccessors():  # loop over all adjacency of u
+                node = self.nd_dict[v[0]]
+                if (node not in queue) and (node not in explored):
+                    # Add to the first elemenet in queue
+                    queue.insert(0, node)  # add v to Q
+                    transitionTable[node] = u
+        # from transition table (transitionTable) to answer (ndList)
+        now_nd = nd_to
+        ndList.insert(0, now_nd)
+        while now_nd is not nd_from:
+            now_nd = transitionTable[now_nd]
+            ndList.insert(0, now_nd)  # insert to the front end, then no need to reverse
+        # what I write end ------
+        for i in ndList:
+            print(i.getIndex())
+        return ndList 
 
     def getAction(self, car_dir, nd_from, nd_to):
         """ return an action and the next direction of the car """

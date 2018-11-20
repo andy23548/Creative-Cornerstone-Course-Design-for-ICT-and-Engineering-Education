@@ -1,7 +1,7 @@
 #include  <SoftwareSerial.h>
 #include <Wire.h>  
 #define DEBUG
-SoftwareSerial I2CBT(10,11); //定義PIN10及PIN11分別為RX及TX腳位
+SoftwareSerial I2CBT(0,1); //定義PIN10及PIN11分別為RX及TX腳位
 
 // App Controller State
 enum ControlState {
@@ -17,10 +17,10 @@ enum ControlState {
 // L298N 馬達驅動板
 // 宣告 MotorR 為右邊
 // 宣告 MotorL 為左邊
-#define MotorR_I1     6  //定義 I1 接腳
-#define MotorR_I2     7 //定義 I2 接腳
-#define MotorL_I3     4 //定義 I3 接腳
-#define MotorL_I4     5 //定義 I4 接腳
+#define MotorRR_I3     6  //定義 I1 接腳
+#define MotorRR_I4     7 //定義 I2 接腳
+#define MotorLL_I1     4 //定義 I3 接腳
+#define MotorLL_I2     5 //定義 I4 接腳
 #define MotorR_PWMR    9  //定義 ENA (PWM調速) 接腳
 #define MotorL_PWML    3  //定義 ENB (PWM調速) 接腳
 // 循線模組
@@ -70,10 +70,10 @@ void setup()
    // Setting PINMode
    Serial.begin(9600);
    I2CBT.begin(9600);
-   pinMode(MotorR_I1,   OUTPUT);
-   pinMode(MotorR_I2,   OUTPUT);
-   pinMode(MotorL_I3,   OUTPUT);
-   pinMode(MotorL_I4,   OUTPUT);
+   pinMode(MotorRR_I3,   OUTPUT);
+   pinMode(MotorRR_I4,   OUTPUT);
+   pinMode(MotorLL_I1,   OUTPUT);
+   pinMode(MotorLL_I2,   OUTPUT);
    pinMode(MotorR_PWMR, OUTPUT);
    pinMode(MotorL_PWML, OUTPUT);
    pinMode(R1, INPUT); 
@@ -285,22 +285,22 @@ void MotorWriting(double vR, double vL) {
    //TODO
    if (vR >= 0) {
      R_dir = true;
-     digitalWrite(MotorR_I1, LOW); 
-     digitalWrite(MotorR_I2, HIGH);
+     digitalWrite(MotorRR_I3, LOW); 
+     digitalWrite(MotorRR_I4, HIGH);
    } else if (vR < 0) {
      R_dir = false; 
-     digitalWrite(MotorR_I1, HIGH); 
-     digitalWrite(MotorR_I2, LOW);
+     digitalWrite(MotorRR_I3, HIGH); 
+     digitalWrite(MotorRR_I4, LOW);
      vR = -vR;
    }
    if (vL >= 0) {
      L_dir = true;
-     digitalWrite(MotorL_I3, LOW); 
-     digitalWrite(MotorL_I4, HIGH);
+     digitalWrite(MotorLL_I1, LOW); 
+     digitalWrite(MotorLL_I2, HIGH);
    } else if (vL < 0) {
      L_dir = false;
-     digitalWrite(MotorL_I3, HIGH); 
-     digitalWrite(MotorL_I4, LOW);
+     digitalWrite(MotorLL_I1, HIGH); 
+     digitalWrite(MotorLL_I2, LOW);
      vL = -vL;
    }
    analogWrite(MotorL_PWML,vL); 
@@ -342,19 +342,19 @@ void MotorWriting(double vR, double vL) {
 //   dir = !dir;
 //   if (motor == 1) {
 //     if (dir == true) {
-//       digitalWrite(MotorR_I1, HIGH); 
-//       digitalWrite(MotorR_I2, LOW);
+//       digitalWrite(MotorRR_I3, HIGH); 
+//       digitalWrite(MotorRR_I4, LOW);
 //     } else {
-//       digitalWrite(MotorR_I1, LOW); 
-//       digitalWrite(MotorR_I2, HIGH);
+//       digitalWrite(MotorRR_I3, LOW); 
+//       digitalWrite(MotorRR_I4, HIGH);
 //     }
 //   } else if (motor == 2) {
 //     if (dir == true) {
-//       digitalWrite(MotorL_I3, HIGH); 
-//       digitalWrite(MotorL_I4, LOW);
+//       digitalWrite(MotorLL_I1, HIGH); 
+//       digitalWrite(MotorLL_I2, LOW);
 //     } else {
-//       digitalWrite(MotorL_I3, LOW); 
-//       digitalWrite(MotorL_I4, HIGH);
+//       digitalWrite(MotorLL_I1, LOW); 
+//       digitalWrite(MotorLL_I2, HIGH);
 //     }
 //   }
 //}

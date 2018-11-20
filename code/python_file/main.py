@@ -10,8 +10,9 @@ import sys
 import os
 
 def main():
-    maze = mz.Maze("data/maze.csv")
+    maze = mz.Maze("data/maze_test.csv")
     next_nd = maze.getStartPoint()
+    node_dict = maze.getNodeDict()
     car_dir = Direction.SOUTH
     point = score.Scoreboard("data/UID.csv")
     interface = student.interface()         # the part of calling student.py was commented out.
@@ -48,7 +49,14 @@ def main():
             	print("end process")
             	print('')
             	break
-            ndList = maze.stategy_2(next_nd,nd)
+            try:
+                nd = node_dict[nd]
+            except:
+                print("Your input is not a valid node !!")
+                raise IndexError("No node!")
+            # print(nd)
+            # print(next_nd)
+            ndList = maze.strategy_2(next_nd,nd)
 
             for i in range(1, len(ndList)):
                 get_UID = "just a test"
