@@ -135,24 +135,24 @@ class Maze:
             if car_dir not in range(1,5):
                 raise Exception("car_dir invalid ERROR!")
             if nd_dir == car_dir:
-                return Action.ADVANCE
+                return self.Action.ADVANCE
             if ((car_dir == 1) and (nd_dir == 4)) or\
                 ((car_dir == 4) and (nd_dir == 2)) or\
                 ((car_dir == 2) and (nd_dir == 3)) or\
                 ((car_dir == 3) and (nd_dir == 1)):
-                return Action.TURN_RIGHT
+                return self.Action.TURN_RIGHT
             if ((car_dir == 1) and (nd_dir == 3)) or\
                 ((car_dir == 3) and (nd_dir == 2)) or\
                 ((car_dir == 2) and (nd_dir == 4)) or\
                 ((car_dir == 4) and (nd_dir == 1)):
-                return Action.TURN_LEFT
+                return self.Action.TURN_LEFT
             if ((car_dir == 1) and (nd_dir == 2)) or\
                 ((car_dir == 3) and (nd_dir == 4)) or\
                 ((car_dir == 2) and (nd_dir == 1)) or\
                 ((car_dir == 4) and (nd_dir == 3)):
-                return Action.U_TURN
+                return self.Action.U_TURN
             print("Error: Failed to get the action")
-            return Action.HALT
+            return self.Action.HALT
         else:
             print("Error: Node(",nd_to.getIndex(),") is not the Successor of Node(",nd_from.getIndex(),")")
             return 0

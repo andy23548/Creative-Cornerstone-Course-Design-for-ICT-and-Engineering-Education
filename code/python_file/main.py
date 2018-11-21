@@ -57,8 +57,13 @@ def main():
             # print(nd)
             # print(next_nd)
             ndList = maze.strategy_2(next_nd,nd)
-
             for i in range(1, len(ndList)):
+                current_node = ndList[i-1]
+                next_node = ndList[i]
+                action = maze.getAction(car_dir, current_node, current_node, next_node)
+                # Send the state to Arduino
+                interface.send_action(action)
+
                 get_UID = "just a test"
                 point.add_UID(get_UID)
 

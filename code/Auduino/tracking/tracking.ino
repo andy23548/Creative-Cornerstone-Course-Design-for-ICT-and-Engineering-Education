@@ -1,11 +1,7 @@
-#include <Wire.h>
-#include <SoftwareSerial.h>
+#include<Wire.h>
+#include<SoftwareSerial.h>
 #include <SPI.h>
 #include <MFRC522.h>
-#include "track.h"
-#include "node.h"
-#include "bluetooth.h"
-#include "RFID.h"
 
 // App Controller State
 enum ControlState {
@@ -16,9 +12,9 @@ enum ControlState {
    FINAL_STATE
 };
 
-#define RST_PIN      8        // RFID reset pin
+#define RST_PIN      4        // RFID reset pin
 #define SS_PIN       13        // RFID selection pin
-#define RFID_SDA     10
+#define RFID_SDA      9
 #define RFID_SCK     13
 #define RFID_MOSI    11
 #define RFID_MISO    12
@@ -68,11 +64,11 @@ bool L_dir = true;                  // if dir == ture, mean Left-motor is forwar
 /*   Function Prototypes Define Here  */
 /*   Finish TODO in Blacking Function */
 /**************************************/
-void Final_Mode();
 void Tracing_Mode();
 void Remote_Mode();
 void Start_Mode();
 void Setting_Mode();
+void Final_Mode();
 void MotorWriting(double& vR, double& vL);
 //void MotorInverter(int motor, bool& _cmd);
 void get_cmd(char& cmd);
@@ -119,7 +115,10 @@ void setup()
     /*define your pin mode*/
 }
 
-
+#include "track.h"
+#include "node.h"
+#include "bluetooth.h"
+#include "RFID.h"
 
 void loop()
 {
@@ -128,7 +127,6 @@ void loop()
    else if(_state == REMOTE_STATE) Remote_Mode();
    else if(_state == TRACKING_STATE) Tracing_Mode();
    else if(_state == SETTING_STATE) Setting_Mode();
-   else if(_state == FINAL_STATE) Final_Mode();
    SetState();
 }
 
@@ -177,6 +175,14 @@ void SetState() {
          #ifdef DEBUG
          Serial.println("Changing to Setting Mode...");
          #endif
+      } else if (_cmd == 'z') {
+        _state = FINAL_STATE;
+        /// Do something to check
+
+
+        #ifdef DEBUG
+        Serial.println("Changing to Setting Mode...");
+        #endif
       } else { _state = _state; }
    } else if(_state == TRACKING_STATE) {
       //TODO
@@ -215,7 +221,16 @@ void SetState() {
          Serial.println("Changing to Tracking Mode..."); 
          #endif
       } else { _state = _state; }
-   } else ;
+   }  else if (_state == FINAL_STATE) {
+     if(_cmd == 'z') { 
+         // change _state and reinitialize _cmd
+         _state = REMOTE_STATE;
+         // For debugging you can ignore this
+         #ifdef DEBUG
+         Serial.println("Backing to Remote Mode..."); 
+         #endif
+      } else { _state = _state; }
+   }
 }
 
 
@@ -283,29 +298,33 @@ void Tracing_Mode() {
   } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == LOW) && (l2 == HIGH)) {
     // big left turn
     MotorWriting(250, -100);
+  } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == LOW) && (l2 == LOW)) {
+    MotorWriting(100, 100);
   } else {
-    // don't know what to do; stop
     MotorWriting(-40, -40);
   }
-   delay(100);
+    // don't know what to do; stop
+//       delay(50);
 
-   //p-control 
-//    int _Vr = 50;
-//    int _Vl = 50;
-//    double _w2 = 10;
-//    double _w1 = 5;
-//    double _Kp;
+  }
 
-//   _Vr = _Vr + r2*_w2 + r1*_w1 + m - l1*_w1 - l2*_w2;
-//   _Vl = _Vl + l2*_w2 + l1*_w1 + m - r1*_w1 - r2*_w2; 
-//   if (_Vr >200){
-//     _Vr = 200;
-//   }
-//   if(_Vl > 200 ){
-//     _Vl = 200;
-//   }
-//   MotorWriting(_Vr,_Vl);
-}
+//   //p-control 
+////    int _Vr = 50;
+////    int _Vl = 50;
+////    double _w2 = 10;
+////    double _w1 = 5;
+////    double _Kp;
+//
+////   _Vr = _Vr + r2*_w2 + r1*_w1 + m - l1*_w1 - l2*_w2;
+////   _Vl = _Vl + l2*_w2 + l1*_w1 + m - r1*_w1 - r2*_w2; 
+////   if (_Vr >200){
+////     _Vr = 200;
+////   }
+////   if(_Vl > 200 ){
+////     _Vl = 200;
+////   }
+////   MotorWriting(_Vr,_Vl);
+//}
 
 void MotorWriting(double vR, double vL) {
 
@@ -421,34 +440,6 @@ void Remote_Mode() {
      MotorWriting(0, 0);
    }
    // what I write END  
-}
-
-void Final_Mode() {
-   //TODO
-   /***********************************************/
-   /* 1. Receive action from py */
-   /* 2. Scan for RFID while tracking */
-   /* 3. Send RFID when succesfully scanned */
-   /* repeat from 1 */
-   /***********************************************/
-   /*   Start from first node
-        python:   GetAction(car_dir, nd_from, nd_to)
-                  SendAction to Arduino
-        Arduino:  Receive action from python
-                  Move to next node
-                  read RFID
-                  Send RFID to python
-        python:   Receive RFID
-                  Process and get next action
-                  send to Arduino
-        Arduino:  repeat from previous
-        Python:   Repeat from previous until final node is reached
-                  send 'e' (end cycle)
-        Arduino:  stop motors
-                  break connection              
-      */
-   
-   
 }
 
 void get_cmd(char &cmd) {
