@@ -70,8 +70,8 @@ void Tracing() {
         if (BT.available()) {
           BT.write('N');
         }
-        Serial.print("Sent id: ");
-        Serial.println('N');
+//        Serial.print("Sent id: ");
+        Serial.print('N');
      }
      if (_cmd == 'f') {
       // Advance !!
@@ -84,7 +84,7 @@ void Tracing() {
        Serial.print("_cmd: ");
        Serial.println(_cmd);
        MotorWriting(200, 200);
-       delay(300);
+       delay(500);
        MotorWriting(200, -200);
        delay(700);
     } else if (_cmd == 'r') {
@@ -92,7 +92,7 @@ void Tracing() {
        Serial.print("_cmd: ");
        Serial.println(_cmd);
        MotorWriting(200, 200);
-       delay(300);
+       delay(500);
        MotorWriting(0, 200);
        delay(700);
     } else if (_cmd == 'l') {
@@ -100,7 +100,7 @@ void Tracing() {
        Serial.print("_cmd: ");
        Serial.println(_cmd);
        MotorWriting(200, 200);
-       delay(300);
+       delay(500);
        MotorWriting(200, 0);
        delay(700);
     } else if (_cmd == 'h') {
@@ -108,7 +108,7 @@ void Tracing() {
        Serial.print("_cmd: ");
        Serial.println(_cmd);
        MotorWriting(200, 200);
-       delay(300);
+       delay(500);
        MotorWriting(0, 0);
        delay(1000);
     } else {
@@ -116,9 +116,9 @@ void Tracing() {
        * Testing only!!!!
        */
 //      // Left turn
-//      MotorWriting(200, 0);
+//       MotorWriting(0, 0);
 //      delay(700);
-  //    Serial.println("Invalid cmd!!!");
+//      Serial.println("Invalid cmd!!!");
     }
   } else {    
     MotorWriting(-40, -40);

@@ -30,8 +30,8 @@ class bluetooth:
         #TODO: Get the information from Bluetooth. Notice that the return type should be transformed into hex. 
         waiting = self.ser.in_waiting
         if waiting > 0:
-            rv = self.ser.readline().decode("utf-8")
-            print(rv) #use for debug
+            rv = self.ser.read(1).decode("utf-8")
+            # print(rv) #use for debug
             # reset_input_buffer()
             return rv
         return ""

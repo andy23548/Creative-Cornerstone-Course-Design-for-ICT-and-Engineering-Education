@@ -24,8 +24,8 @@ void reach_node_send_to_python () {
     if (BT.available()) {
       BT.write('N');
     }
-    Serial.print("Sent id: ");
-    Serial.println('N');
+//    Serial.print("Sent id: ");
+//    Serial.println('N');
   }
 }
 

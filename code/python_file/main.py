@@ -58,29 +58,67 @@ def main():
             ## Check the result for the whole BFS!!!
             for node in ndList:
                 print(node.getIndex())
-            # state_cmd = input("Please enter a mode command: ")
-            interface.ser.SerialWrite("s")
-            interface.ser.SerialReadString()
             state_cmd = input("Please enter a mode command: ")
             interface.ser.SerialWrite(state_cmd)
-            interface.ser.SerialReadString()
-
+            state_cmd = input("Please enter a mode command: ")
+            interface.ser.SerialWrite(state_cmd)
+        ## Testing encounter the node !!
+            while(1):
+                python_get_information = interface.ser.SerialReadString()
+                if python_get_information is 'N':
+                    print(python_get_information, "\n")
+                    print("Get to a node!!\n")
+                    break
             for i in range(1, len(ndList)):
                 current_node = ndList[i-1]
                 next_node = ndList[i]
                 action = maze.getAction(car_dir, current_node, next_node)
-                print("Get Action: ", action, "\n")
+                # current car position + to node => get action
+                # print("Get Action: ", action, "\n")
+                print("Current Car direction: ", car_dir)
+                if action == mz.Action.ADVANCE:
+                    car_dir = car_dir
+                elif action == mz.Action.U_TURN:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.NORTH
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.WEST
+                elif action == mz.Action.TURN_RIGHT:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.WEST
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.NORTH
+                elif action == mz.Action.TURN_LEFT:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.WEST
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.NORTH
                 # When car arrive to a node !!!
                 python_get_information = interface.ser.SerialReadString()
                 print("python_get_information: ", python_get_information, "\n")
                 while python_get_information is not 'N':
-                    print("Not in the node... Tracking \n")
+                    python_get_information = interface.ser.SerialReadString()
+                    # print("Not in the node... Tracking \n")
                 print("Get to a node!!\n")
                 # Send the state to Arduino
+                print("Get action: ", action)
                 interface.send_action(action)
                 # node = 0
                 # get_UID = "just a test"
                 # point.add_UID(get_UID)
+            interface.send_action(mz.Action.HALT)
             break
 
     # Have destination
@@ -102,16 +140,16 @@ def main():
             # print(next_nd)
             ndList = maze.strategy_2(next_nd,nd)
         ###Testing for getting into a node !!
-            # state_cmd = input("Please enter a mode command: ")
-            # interface.ser.SerialWrite(state_cmd)
-            # interface.ser.SerialReadString()
-            # state_cmd = input("Please enter a mode command: ")
-            # interface.ser.SerialWrite(state_cmd)
-            # interface.ser.SerialReadString()
-            # while(1):
-            #     python_get_information = interface.ser.SerialReadString()
-            #     if python_get_information is 'N':
-            #         print("Get to a node!!\n")
+            state_cmd = input("Please enter a mode command: ")
+            interface.ser.SerialWrite(state_cmd)
+            interface.ser.SerialReadString()
+            state_cmd = input("Please enter a mode command: ")
+            interface.ser.SerialWrite(state_cmd)
+            interface.ser.SerialReadString()
+            while(1):
+                python_get_information = interface.ser.SerialReadString()
+                if python_get_information is 'N':
+                    print("Get to a node!!\n")
 
 
             for i in range(1, len(ndList)):
