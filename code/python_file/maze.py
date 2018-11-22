@@ -64,9 +64,7 @@ class Maze:
                 break
             # u : the last element of queue
             u = queue.pop()
-            print("Debug")
-            print(u.getIndex())
-            print(self.nd_dict[u.getSuccessors()[0][0]] in explored)
+            # print(self.nd_dict[u.getSuccessors()[0][0]] in explored)
             if (len(u.getSuccessors()) is 1) and (self.nd_dict[u.getSuccessors()[0][0]] in explored) :  # check if u is the end node
                 nd_to = u
                 break  # return the transition table
@@ -84,8 +82,6 @@ class Maze:
             now_nd = transitionTable[now_nd]
             ndList.insert(0, now_nd)  # insert to the front end, then no need to reverse
         # what I write end ------
-        for i in ndList:
-            print(i.getIndex())
         return ndList 
 
     def BFS_2(self, nd_from, nd_to):
@@ -105,8 +101,6 @@ class Maze:
                 break
             # u : the last element of queue
             u = queue.pop()
-            print("Debug")
-            print(u.getIndex())
             if u is nd_to:  # check if u is the end node
                 break  # return the transition table
             explored.add(u)  # add u to explored set
@@ -129,35 +123,51 @@ class Maze:
 
     def getAction(self, car_dir, nd_from, nd_to):
         """ return an action and the next direction of the car """
-        if nd_from.isSuccessor(nd_to):
-            nd_dir = nd_from.getDirection(nd_to)
+        print(nd_from.getIndex())
+        print(nd_to.getIndex())
+        print(nd_from.getSuccessors())
+        print(nd_to.getSuccessors())
+        if nd_from.isSuccessor(nd_to.getIndex()):
+            nd_dir = nd_from.getDirection(nd_to.getIndex())
             #TODO: Return the action based on the current car direction and the direction to next node
             if car_dir not in range(1,5):
                 raise Exception("car_dir invalid ERROR!")
             if nd_dir == car_dir:
-                return self.Action.ADVANCE
+                return Action.ADVANCE
             if ((car_dir == 1) and (nd_dir == 4)) or\
                 ((car_dir == 4) and (nd_dir == 2)) or\
                 ((car_dir == 2) and (nd_dir == 3)) or\
                 ((car_dir == 3) and (nd_dir == 1)):
-                return self.Action.TURN_RIGHT
+                return Action.TURN_RIGHT
             if ((car_dir == 1) and (nd_dir == 3)) or\
                 ((car_dir == 3) and (nd_dir == 2)) or\
                 ((car_dir == 2) and (nd_dir == 4)) or\
                 ((car_dir == 4) and (nd_dir == 1)):
-                return self.Action.TURN_LEFT
+                return Action.TURN_LEFT
             if ((car_dir == 1) and (nd_dir == 2)) or\
                 ((car_dir == 3) and (nd_dir == 4)) or\
                 ((car_dir == 2) and (nd_dir == 1)) or\
                 ((car_dir == 4) and (nd_dir == 3)):
-                return self.Action.U_TURN
+                return Action.U_TURN
             print("Error: Failed to get the action")
-            return self.Action.HALT
+            return Action.HALT
         else:
             print("Error: Node(",nd_to.getIndex(),") is not the Successor of Node(",nd_from.getIndex(),")")
             return 0
 
     def strategy(self, nd):
+        # deadend_node_num = 0
+        # for i in self.nodes:
+        #     if len(i.getSuccessors()) == 1:
+        #         deadend_node_num += 1
+        # start_nd = nd
+        # BFS_list = 0
+        # for i in range(1, deadend_node_num+1):
+        #     BFS_list_run = self.BFS(start_nd)
+        #     BFS_list = BFS_list_run
+        #     start_nd = BFS_list[-1]
+        #     for i in BFS_list:
+        #         print(i.getIndex())
         return self.BFS(nd)
 
     def strategy_2(self, nd_from, nd_to):

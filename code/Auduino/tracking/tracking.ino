@@ -56,6 +56,7 @@ double _Kd;                         // _Kd Parameter
 double _Ki;                         // _Ki Parameter
 double _LastError;                  // Error in Last Stage
 char   _cmd;                        // Command
+//char   _final_project_cmd;          // Final project Command
 double _integral;                   // Integral from Starting point
 bool R_dir = true;                  // if dir == ture, mean right-motor is forwarding. On the other hand, backwarding.
 bool L_dir = true;                  // if dir == ture, mean Left-motor is forwarding. On the other hand, backwarding.
@@ -99,6 +100,7 @@ void setup()
    // You can Define you own value here.
    _state = START_STATE;      // Control State
    _cmd = 'n';                // Command
+//   _final_project_cmd = 'n';
    _Tp    = 130;              // Velocity of Car
    _w2    = 13.5;             // Second Stage Weight
    _w1    = _w2/2.0;          // First Stage Weight
@@ -108,10 +110,9 @@ void setup()
    _LastError = 0;            // Error in Last Stage
    _integral  = 0;
    Serial.println("Start!");
-    
+
     SPI.begin();         //RFID initialization
     mfrc522.PCD_Init();
-
     /*define your pin mode*/
 }
 
@@ -127,11 +128,9 @@ void loop()
    else if(_state == REMOTE_STATE) Remote_Mode();
    else if(_state == TRACKING_STATE) Tracing_Mode();
    else if(_state == SETTING_STATE) Setting_Mode();
+   else if(_state == FINAL_STATE) Final_Mode();
    SetState();
 }
-
-
-
 
 
 void Start_Mode() {
@@ -154,9 +153,9 @@ void SetState() {
          // change _state and reinitialize _cmd
          _state = REMOTE_STATE;
          // For debugging you can ignore this
-         #ifdef DEBUG
+//         #ifdef DEBUG
          Serial.println("Changing to Remote Mode..."); 
-         #endif
+//         #endif
       } else { _state = _state; }
    } else if(_state == REMOTE_STATE) {
       //TODO
@@ -178,7 +177,6 @@ void SetState() {
       } else if (_cmd == 'z') {
         _state = FINAL_STATE;
         /// Do something to check
-
 
         #ifdef DEBUG
         Serial.println("Changing to Setting Mode...");
@@ -226,9 +224,10 @@ void SetState() {
          // change _state and reinitialize _cmd
          _state = REMOTE_STATE;
          // For debugging you can ignore this
-         #ifdef DEBUG
+         MotorWriting(0,0);
+//         #ifdef DEBUG
          Serial.println("Backing to Remote Mode..."); 
-         #endif
+//         #endif
       } else { _state = _state; }
    }
 }
@@ -306,7 +305,7 @@ void Tracing_Mode() {
     // don't know what to do; stop
 //       delay(50);
 
-  }
+}
 
 //   //p-control 
 ////    int _Vr = 50;
@@ -421,51 +420,32 @@ void Remote_Mode() {
    // check the value of _cmd (it should contains the command corresponding to the app on the cellphone)
    if(_cmd == 'r') {
      // turn right
+     Serial.println("Turn right!");
      MotorWriting(0, 200);
    }
    else if(_cmd == 'l') {
      // turn left
+     Serial.println("Turn left!");
      MotorWriting(200, 0);
    }
    else if(_cmd == 'd') {
      // backward
+     Serial.println("Turn back!");
      MotorWriting(-200, -200);
    }
    else if(_cmd == 'u') {
      // forward
+     Serial.println("Turn forward!");
      MotorWriting(200, 200);
    }
    else if(_cmd == 's') {
      // stop
+     Serial.println("Stop!");
      MotorWriting(0, 0);
    }
    // what I write END  
 }
 
-void get_cmd(char &cmd) {
-   delay(10); // Don't delete its!!
-   
-   /*************************************/
-   /* Using I2CBT object to get command */
-   /* Assign value to cmd               */
-   /*************************************/
-   if(true) {
-     //TODO
-     // what I write START
-     // just record the char what I2CBT read
-     if (BT.available()) {
-       cmd = BT.read();
-     }else{
-      cmd = 'n';
-     }
-     // what I write END
-     // For debugging you can ignore this
-     #ifdef DEBUG
-     Serial.print("Cmd: ");
-     Serial.println(cmd);
-     #endif
-   }
-}
 
 void Setting_Mode() {
    /**********************************/
@@ -479,11 +459,11 @@ void Setting_Mode() {
 //   bool sended = false;
 //   while(1){
 //     delay(50);
-//     s = I2CBT.available();
+//     s = BT.available();
 //     if(s) { sended = true; }
 //     bool in = false;
 //     if(s>0){
-//       I2CBT.readBytes(text,2);
+//       BT.readBytes(text,2);
 //       Serial.print("Input size(be readBy): ");
 //       Serial.println(s);
 //       if(text[0] == 'p') {
@@ -518,6 +498,62 @@ void Setting_Mode() {
 //   }
 //   _cmd = 't';
 }
+
+void Final_Mode() {
+   //TODO
+   /***********************************************/
+   /* 1. Receive action from py */
+   /* 2. Scan for RFID while tracking */
+   /* 3. Send RFID when succesfully scanned */
+   /* repeat from 1 */
+   /***********************************************/
+   /*   Start from first node
+        python:   GetAction(car_dir, nd_from, nd_to)
+                  SendAction to Arduino
+        Arduino:  Receive action from python
+                  Move to next node
+                  read RFID
+                  Send RFID to python
+        python:   Receive RFID
+                  Process and get next action
+                  send to Arduino
+        Arduino:  repeat from previous
+        Python:   Repeat from previous until final node is reached
+                  send 'e' (end cycle)
+        Arduino:  stop motors
+                  break connection              
+      */
+//  ask_direction();
+  //Tracking
+  Tracing();
+}
+
+void get_cmd(char &cmd) {
+   delay(10); // Don't delete its!!
+   
+   /*************************************/
+   /* Using BT object to get command */
+   /* Assign value to cmd               */
+   /*************************************/
+   if(true) {
+     //TODO
+     // what I write START
+     // just record the char what BT read
+     if (BT.available()) {
+       cmd = BT.read();
+     }else{
+      cmd = 'n';
+     }
+     // what I write END
+     // For debugging you can ignore this
+     #ifdef DEBUG
+     Serial.print("Cmd: ");
+     Serial.println(cmd);
+     #endif
+   }
+}
+
+
 void MotorCheck() {
    MotorWriting(200, 200);
    delay(500);

@@ -26,14 +26,19 @@ class interface:
     def send_action(self,dirc):
         if(dirc == maze.Action.ADVANCE):
             self.ser.SerialWrite('f')
+            print("send_action: ", maze.Action.ADVANCE)
         elif(dirc == maze.Action.U_TURN):
             self.ser.SerialWrite('b')
+            print("send_action: ", maze.Action.U_TURN)
         elif(dirc == maze.Action.TURN_RIGHT):
             self.ser.SerialWrite('r')
+            print("send_action: ", maze.Action.TURN_RIGHT)
         elif(dirc == maze.Action.TURN_LEFT):
             self.ser.SerialWrite('l')
+            print("send_action: ", maze.Action.TURN_LEFT)
         elif(dirc == maze.Action.HALT):
             self.ser.SerialWrite('h')
+            print("send_action: ", maze.Action.HALT)
         else:
             print ('Error: An invalid input for action.')
 

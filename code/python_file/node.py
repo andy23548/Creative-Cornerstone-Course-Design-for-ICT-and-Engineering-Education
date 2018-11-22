@@ -51,7 +51,7 @@ class Node:
 
     def getDirection(self, nd):
         for succ in self.Successors:
-            if succ[0] == nd.getIndex:
+            if succ[0] == nd:
                 return succ[1]
             #TODO: Check which successor matches the input direction and return
         # For the valid input, the below part shouldn't be entered
@@ -61,6 +61,8 @@ class Node:
 
     def isSuccessor(self, nd):
         for succ in self.Successors:
+            print("succ[0]: ", succ[0])
+            print("nd: ", nd)
             if succ[0] == nd: return True
         return False
 
