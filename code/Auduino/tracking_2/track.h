@@ -15,7 +15,6 @@ void Tracing() {
    int m = digitalRead(M); // middle sensor
    int l1 = digitalRead(L1); // left-inner sensor
    int l2 = digitalRead(L2);
-
 //   Serial.println(r2);
 //   Serial.println(r1);
 //   Serial.println(m);
@@ -69,46 +68,62 @@ void Tracing() {
      // Send back to Python !!  
     if (true) {
         if (BT.available()) {
-//          BT.write('N');
+          BT.write('N');
         }
 //        Serial.print("Sent id: ");
-        Serial.println('N');
-        while(1) {
-          get_cmd(_cmd);
-          if (_cmd == 'f' ||_cmd == 'b' ||_cmd == 'r' ||_cmd == 'l' ||_cmd == 'h') {
-            break;
-          }
-        }
+        Serial.print('N');
      }
-         if (_cmd == 'f') {
-            // Advance !!
-            right_motor = 200;
-            left_motor = 200;
-          } else if (_cmd == 'b') {
-            // U-Turn
-            right_motor = 200;
-            left_motor = -200;
-          } else if (_cmd == 'r') {
-            right_motor = 0;
-            left_motor = 230;
-          } else if (_cmd == 'l') {
-            // Turn right
-            right_motor = 200;
-            left_motor = 0;
-          } else if (_cmd == 'h') {
-            // Halt
-            right_motor = 0;
-            left_motor = 0;
-          }
-        MotorWriting(right_motor, left_motor);
-        delay(700);
-//        MotorWriting(100, 100);
-//        delay(300);
-            /**
-             * Testing only!!!!
-             */
-//             Left turn
-//            Serial.println("Invalid cmd!!!");
-//            Serial.println(_cmd);
-   }
+     if (_cmd == 'f') {
+      // Advance !!
+       Serial.print("_cmd: ");
+       Serial.println(_cmd);
+       MotorWriting(200, 200);
+       delay(800);
+    } else if (_cmd == 'b') {
+      // U-Turn
+       Serial.print("_cmd: ");
+       Serial.println(_cmd);
+//       MotorWriting(200, 200);
+//       delay(500);
+       MotorWriting(200, -200);
+       delay(700);
+    } else if (_cmd == 'r') {
+      // Turn right
+       Serial.print("_cmd: ");
+       Serial.println(_cmd);
+//       MotorWriting(200, 200);
+//       delay(500);
+       MotorWriting(0, 200);
+       delay(700);
+    } else if (_cmd == 'l') {
+      // Turn right
+       Serial.print("_cmd: ");
+       Serial.println(_cmd);
+//       MotorWriting(200, 200);
+//       delay(500);
+       MotorWriting(200, 0);
+       delay(700);
+    } else if (_cmd == 'h') {
+      // Halt
+       Serial.print("_cmd: ");
+       Serial.println(_cmd);
+//       MotorWriting(200, 200);
+//       delay(500);
+       MotorWriting(0, 0);
+       delay(1000);
+    } else {
+      /**
+       * Testing only!!!!
+       */
+      // Left turn
+//       MotorWriting(200, 0);
+//      delay(700);
+//      Serial.println("Invalid cmd!!!");
+    }
+  } else {    
+    MotorWriting(-40, -40);
+  }
+    // don't know what to do; stop
+//       delay(50);
+
 }

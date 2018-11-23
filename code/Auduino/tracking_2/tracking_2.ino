@@ -60,9 +60,6 @@ char   _cmd;                        // Command
 double _integral;                   // Integral from Starting point
 bool R_dir = true;                  // if dir == ture, mean right-motor is forwarding. On the other hand, backwarding.
 bool L_dir = true;                  // if dir == ture, mean Left-motor is forwarding. On the other hand, backwarding.
-int right_motor = 0;
-int left_motor = 0;
-int node_time = 0;
 
 /**************************************/
 /*   Function Prototypes Define Here  */
@@ -127,9 +124,6 @@ void setup()
 void loop()
 {
     /*TODO*/
-   if (_cmd != 'n') {
-    Serial.println(_cmd);    
-   }
    if(_state == START_STATE) Start_Mode();
    else if(_state == REMOTE_STATE) Remote_Mode();
    else if(_state == TRACKING_STATE) Tracing_Mode();
@@ -234,8 +228,7 @@ void SetState() {
 //         #ifdef DEBUG
          Serial.println("Backing to Remote Mode..."); 
 //         #endif
-      } 
-      else { _state = _state; }
+      } else { _state = _state; }
    }
 }
 
