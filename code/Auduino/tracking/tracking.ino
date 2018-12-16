@@ -1,3 +1,4 @@
+//#define DEBUG
 #include<Wire.h>
 #include<SoftwareSerial.h>
 #include <SPI.h>
@@ -24,12 +25,12 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // MFRC522 object declaration
 // L298N 馬達驅動板
 // 宣告 MotorR 為右邊
 // 宣告 MotorL 為左邊
-#define MotorRR_I3     6  //定義 I1 接腳
-#define MotorRR_I4     7 //定義 I2 接腳
-#define MotorLL_I1     4 //定義 I3 接腳
-#define MotorLL_I2     5 //定義 I4 接腳
-#define MotorR_PWMR    9  //定義 ENA (PWM調速) 接腳
-#define MotorL_PWML    3  //定義 ENB (PWM調速) 接腳
+#define MotorRR_I3     4  //定義 I1 接腳
+#define MotorRR_I4     5 //定義 I2 接腳
+#define MotorLL_I1     6 //定義 I3 接腳
+#define MotorLL_I2     7 //定義 I4 接腳
+#define MotorR_PWMR    3  //定義 ENA (PWM調速) 接腳
+#define MotorL_PWML    9  //定義 ENB (PWM調速) 接腳
 
 // 循線模組
 // observator : sitting in the back of the car
@@ -176,6 +177,7 @@ void SetState() {
          //TODO
          // change _state and reinitialize _cmd
          _state = SETTING_STATE;
+         Serial.println("Changing to Setting Mode...");
          // For debugging you can ignore this
          #ifdef DEBUG
          Serial.println("Changing to Setting Mode...");
@@ -183,7 +185,7 @@ void SetState() {
       } else if (_cmd == 'z') {
         _state = FINAL_STATE;
         /// Do something to check
-
+        Serial.println("Changing to FINAL_State Mode...");
         #ifdef DEBUG
         Serial.println("Changing to Setting Mode...");
         #endif
@@ -555,7 +557,7 @@ void get_cmd(char &cmd) {
      // For debugging you can ignore this
      #ifdef DEBUG
      Serial.print("Cmd: ");
-     Serial.println(cmd);
+     Serial.println(cmd, DEC);
      #endif
    }
 }

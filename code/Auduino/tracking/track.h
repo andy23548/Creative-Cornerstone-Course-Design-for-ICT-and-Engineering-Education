@@ -31,7 +31,7 @@ void Tracing() {
    // HIGH = when black road is sensed
    int high_number = 0;
    high_number = (r2 == HIGH) + (r1 == HIGH) + (m == HIGH) + (l1 == HIGH) + (l2 == HIGH); 
-//   Serial.print("High_number : ");
+//   Serial.print("High_number : ");`
 //   Serial.println(high_number);
   if ((r2 == HIGH) && (r1 == LOW) && (m == LOW) && (l1 == LOW) && (l2 == LOW)) {  
     // big right turn
@@ -44,13 +44,13 @@ void Tracing() {
     MotorWriting(50, 200);
   } else if ((r2 == LOW) && (r1 == HIGH) && (m == HIGH) && (l1 == LOW) && (l2 == LOW)) {
     // small right turn
-    MotorWriting(100, 150);
+    MotorWriting(150, 200);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == HIGH) && (l1 == LOW) && (l2 == LOW)) {
     // center
-    MotorWriting(100, 100);
+    MotorWriting(150, 180);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == HIGH) && (l1 == HIGH) && (l2 == LOW)) {
     // small left turn
-    MotorWriting(150, 100);
+    MotorWriting(200, 150);
   } else if ((r2 == LOW) && (r1 == LOW) && (m == LOW) && (l1 == HIGH) && (l2 == LOW)) {
     // small left turn
     MotorWriting(200, 50);
@@ -75,14 +75,14 @@ void Tracing() {
         Serial.println('N');
         while(1) {
           get_cmd(_cmd);
-          if (_cmd == 'f' ||_cmd == 'b' ||_cmd == 'r' ||_cmd == 'l' ||_cmd == 'h') {
+          if (_cmd == 'f' ||_cmd == 'b' ||_cmd == 'r' ||_cmd == 'l' || _cmd == 'h') {
             break;
           }
         }
      }
          if (_cmd == 'f') {
             // Advance !!
-            right_motor = 200;
+            right_motor = 230;
             left_motor = 200;
           } else if (_cmd == 'b') {
             // U-Turn
@@ -99,6 +99,8 @@ void Tracing() {
             // Halt
             right_motor = 0;
             left_motor = 0;
+            MotorWriting(right_motor, left_motor);
+            delay(5000);
           }
         MotorWriting(right_motor, left_motor);
         delay(700);

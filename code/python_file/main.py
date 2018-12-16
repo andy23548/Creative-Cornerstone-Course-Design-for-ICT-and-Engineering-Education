@@ -65,46 +65,6 @@ def main():
             interface.ser.SerialWrite(state_cmd)
         ## Testing encounter the node !!
             count = 0
-            # while(1):
-                
-            #     python_get_information = interface.ser.SerialReadString()
-            #     if python_get_information is 'N':
-            #         count = count + 1
-            #         print(python_get_information)
-            #         print("Get to 'first' node!!\n")
-            #         interface.send_action(mz.Action.ADVANCE)
-                    # break
-                    # if action == mz.Action.ADVANCE:
-                    #     car_dir = car_dir
-                    # elif action == mz.Action.U_TURN:
-                    #     if car_dir == Direction.NORTH:
-                    #         car_dir = Direction.SOUTH
-                    #     elif car_dir == Direction.SOUTH:
-                    #         car_dir = Direction.NORTH
-                    #     elif car_dir == Direction.WEST:
-                    #         car_dir = Direction.EAST
-                    #     elif car_dir == Direction.EAST:
-                    #         car_dir = Direction.WEST
-                    # elif action == mz.Action.TURN_RIGHT:
-                    #     if car_dir == Direction.NORTH:
-                    #         car_dir = Direction.EAST
-                    #     elif car_dir == Direction.EAST:
-                    #         car_dir = Direction.SOUTH
-                    #     elif car_dir == Direction.SOUTH:
-                    #         car_dir = Direction.WEST
-                    #     elif car_dir == Direction.WEST:
-                    #         car_dir = Direction.NORTH
-                    # elif action == mz.Action.TURN_LEFT:
-                    #     if car_dir == Direction.NORTH:
-                    #         car_dir = Direction.WEST
-                    #     elif car_dir == Direction.WEST:
-                    #         car_dir = Direction.SOUTH
-                    #     elif car_dir == Direction.SOUTH:
-                    #         car_dir = Direction.EAST
-                    #     elif car_dir == Direction.EAST:
-                    #         car_dir = Direction.NORTH
-                    # interface.send_action(mz.Action.U_TURN)
-                    # print("count: ", count)
 
             for i in range(1, len(ndList)):
                 current_node = ndList[i-1]
@@ -147,7 +107,6 @@ def main():
                     python_get_information = interface.ser.SerialReadString()
                     if python_get_information is 'N':
                         count = count + 1
-                        print(python_get_information)
                         print("Get to a node!!\n")
                         break
                 # python_get_information = interface.ser.SerialReadString()
@@ -166,6 +125,7 @@ def main():
                 # node = 0
                 # get_UID = "just a test"
                 # point.add_UID(get_UID)
+            print("Get action: ", mz.Action.HALT)
             interface.send_action(mz.Action.HALT)
             break
 
@@ -190,28 +150,75 @@ def main():
         ###Testing for getting into a node !!
             state_cmd = input("Please enter a mode command: ")
             interface.ser.SerialWrite(state_cmd)
-            interface.ser.SerialReadString()
             state_cmd = input("Please enter a mode command: ")
             interface.ser.SerialWrite(state_cmd)
-            interface.ser.SerialReadString()
-            while(1):
-                python_get_information = interface.ser.SerialReadString()
-                if python_get_information is 'N':
-                    print("Get to a node!!\n")
-
+        ## Testing encounter the node !!
+            count = 0
 
             for i in range(1, len(ndList)):
                 current_node = ndList[i-1]
                 next_node = ndList[i]
-                action = maze.getAction(car_dir, current_node, current_node, next_node)
-                print("Get Action: ", action)
+                action = maze.getAction(car_dir, current_node, next_node)
+                # current car position + to node => get action
+                # print("Get Action: ", action, "\n")
+                print("Current Car direction: ", car_dir)
+                if action == mz.Action.ADVANCE:
+                    car_dir = car_dir
+                elif action == mz.Action.U_TURN:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.NORTH
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.WEST
+                elif action == mz.Action.TURN_RIGHT:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.WEST
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.NORTH
+                elif action == mz.Action.TURN_LEFT:
+                    if car_dir == Direction.NORTH:
+                        car_dir = Direction.WEST
+                    elif car_dir == Direction.WEST:
+                        car_dir = Direction.SOUTH
+                    elif car_dir == Direction.SOUTH:
+                        car_dir = Direction.EAST
+                    elif car_dir == Direction.EAST:
+                        car_dir = Direction.NORTH
                 # When car arrive to a node !!!
-                # if ()
+                while(1):
+                    python_get_information = interface.ser.SerialReadString()
+                    print(python_get_information)
+                    if python_get_information is 'N':
+                        count = count + 1
+                        print(python_get_information)
+                        print("Get to a node!!\n")
+                        break
+                # python_get_information = interface.ser.SerialReadString()
+                # while python_get_information is not 'N':
+                #     python_get_information = interface.ser.SerialReadString()
+                # print("Get to a node!!")
+                # while(1):
+                #     python_get_information = interface.ser.SerialReadString()
+                #     if python_get_information is 'N':
+                #         print(python_get_information)
+                #         print("Get to a node!!\n")
+                #         break
                 # Send the state to Arduino
+                print("Get action: ", action)
                 interface.send_action(action)
-
-                get_UID = "just a test"
-                point.add_UID(get_UID)
+                # node = 0
+                # get_UID = "just a test"
+                # point.add_UID(get_UID)
+            print("Get action: ", mz.Action.HALT)
+            interface.send_action(mz.Action.HALT)
+            break
 
     # Our testing mode
     elif (sys.argv[1] == '2'):
@@ -232,10 +239,10 @@ def main():
             #     print(state_cmd)
 
             interface.ser.SerialWrite(state_cmd)
-            interface.ser.SerialReadString()
-            if state_cmd == "break":
+            # interface.ser.SerialReadString()
+            # if state_cmd == "break":
                 
-                break
+            #     break
     """
     node = 0
     while(not node):
